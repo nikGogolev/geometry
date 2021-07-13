@@ -1,4 +1,14 @@
 let line = document.querySelectorAll('.line');
+let picture = document.querySelector('.picture');
+let width = window.screen.width;
+
+
+if (width > 500){
+	width = 500;
+}
+console.log(picture.style);
+picture.style.width = width;
+picture.style.height = width;
 
 let pointsX1 = [];
 let pointsY1 = [];
@@ -21,13 +31,13 @@ class Point {
 	}
 	
 	defineDirect(){
-		if (this.x > 499){
+		if (this.x > width){
 			this.directX = 'left';
 		} else if (this.x < 1){
 			this.directX = 'right';
 		};
 		
-		if (this.y > 499){
+		if (this.y > width){
 			this.directY = 'up';
 		} else if (this.y < 1){
 			this.directY = 'down';
