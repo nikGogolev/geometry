@@ -2,19 +2,20 @@ let line = document.querySelectorAll('.line');
 let picture = document.querySelector('.picture');
 let width = window.screen.width;
 
-
-if (width > 500){
-	width = 500;
+if (width > 900){
+	width = 900;
 }
-console.log(picture.style);
+let height = width*3/4;
+
 picture.style.width = width;
-picture.style.height = width;
+picture.style.height = height;
 
 let pointsX1 = [];
 let pointsY1 = [];
 let pointsX2 = [];
 let pointsY2 = [];
 let colors = [];
+
 let red = 0;
 let green = 0;
 let blue = 0;
@@ -27,7 +28,9 @@ class Point {
 		this.x = 0,
 		this.y = 0,
 		this.directX = '',
-		this.directY = ''
+		this.directY = '',
+		this.speedX = 0,
+		this.speedY = 0
 	}
 	
 	defineDirect(){
@@ -37,78 +40,89 @@ class Point {
 			this.directX = 'right';
 		};
 		
-		if (this.y > width){
+		if (this.y > height){
 			this.directY = 'up';
 		} else if (this.y < 1){
 			this.directY = 'down';
 		}
 	}
+	
+	moveX(){
+		this.defineDirect();
+		switch (this.directX){
+		
+		case 'left':
+			return this.x -= this.speedX;
+			
+		case 'right':
+			return this.x += this.speedX;
+		}
+	}
+	
+	moveY(){
+		this.defineDirect();
+		switch (this.directY){
+		
+		case 'up':
+			return this.y -= this.speedY;
+			
+		case 'down':
+			return this.y += this.speedY;
+		}
+	}
+}
+
+class Color {
+	constructor(){
+		this.red = 0,
+		this.green = 0,
+		this.blue = 0,
+		this.redDirect = '',
+		this.greenDirect = '',
+		this.blueDirect = '',
+		this.redSpeed = 0,
+		this.greenSpeed = 0,
+		this.blueSpeed = 0
+	}
+	
+	changeColor(){
+		if (this.red > 254){
+			this.redDirect = 'down';
+		} else if (this.red < 1){
+			this.redDirect = 'up';
+		}
+		if (this.green > 254){
+			this.greenDirect = 'down';
+		} else if (this.green < 1){
+			this.greenDirect = 'up';
+		}
+		if (this.blue > 254){
+			this.blueDirect = 'down';
+		} else if (this.blue < 1){
+			this.blueDirect = 'up';
+		}
+		if (this.redDirect == 'down'){
+			this.red -= this.redSpeed;
+		} else if (this.redDirect == 'up'){
+			this.red += this.redSpeed;
+		}
+		if (this.greenDirect == 'down'){
+			this.green -= this.greenSpeed;
+		} else if (this.greenDirect == 'up'){
+			this.green += this.greenSpeed;
+		}
+		if (this.blueDirect == 'down'){
+			this.blue -= this.blueSpeed;
+		} else if (this.blueDirect == 'up'){
+			this.blue += this.blueSpeed;
+		}
+		return `rgb(${this.red},${this.green},${this.blue})`;
+	}
 }
 
 const point1 = new Point;
 const point2 = new Point;
-
-const point3 = new Point;
-const point4 = new Point;
-
-
-function moveCoordinate(coord, add, direction){
-	
-	switch (direction){
-	
-	case 'up':
-		return coord -= add;
-	case 'left':
-		return coord -= add;
-		
-	case 'down':
-		return coord += add;
-	case 'right':
-		return coord += add;
-	}
-}
-
-function changeColor(){
-	
-	
-	if (red > 254){
-		redDirect = 'down';
-	} else if (red < 1){
-		redDirect = 'up';
-	}
-	if (green > 254){
-		greenDirect = 'down';
-	} else if (green < 1){
-		greenDirect = 'up';
-	}
-	if (blue > 254){
-		blueDirect = 'down';
-	} else if (blue < 1){
-		blueDirect = 'up';
-	}
-	
-	if (redDirect == 'down'){
-		red -= 2;
-	} else if (redDirect == 'up'){
-		red += 2;
-	}
-	
-	if (greenDirect == 'down'){
-		green -= 4;
-	} else if (greenDirect == 'up'){
-		green += 4;
-	}
-	
-	if (blueDirect == 'down'){
-		blue -= 5;
-	} else if (blueDirect == 'up'){
-		blue += 5;
-	}
-	
-	
-	return `rgb(${red},${green},${blue})`;
-}
-
+const color1 = new Color;
 
 let geometry = {
 	init(){
@@ -119,30 +133,37 @@ let geometry = {
 			pointsY2[i] = 0;
 			colors[i] = 'rgb(0, 0, 0)';
 		}
+		
 		point1.x = 0;
 		point1.y = 0;
-		point2.x = 0;
-		point2.y = 0;
 		point1.directX = 'right';
 		point1.directY = 'down';
+		point1.speedX = 4;
+		point1.speedY = 3;
+		
+		point2.x = 0;
+		point2.y = 0;
 		point2.directX = 'right';
 		point2.directY = 'down';
-		red = 0;
-		green = 0;
-		blue = 0;
-		redDirect = 'up';
-		greenDirect = 'up';
-		blueDirect = 'up';
+		point2.speedX = 5;
+		point2.speedY = 9;
+		
+		color1.red = 0;
+		color1.green = 0;
+		color1.blue = 0;
+		color1.redDirect = 'up';
+		color1.greenDirect = 'up';
+		color1.blueDirect = 'up';
+		color1.redSpeed = 2;
+		color1.greenSpeed = 4;
+		color1.blueSpeed = 5;
 	},
 	
 	run(){
-		
-		point1.x = moveCoordinate(point1.x, 4, point1.directX);
-		point1.y = moveCoordinate(point1.y, 3, point1.directY);
-		point1.defineDirect();
-		point2.x = moveCoordinate(point2.x, 5, point2.directX);
-		point2.y = moveCoordinate(point2.y, 9, point2.directY);
-		point2.defineDirect();
+		point1.moveX();
+		point1.moveY();
+		point2.moveX();
+		point2.moveY();
 		
 		for (let i = line.length - 1; i > 0; i--){
 			pointsX1[i] = pointsX1[i - 1];
@@ -151,12 +172,12 @@ let geometry = {
 			pointsY2[i] = pointsY2[i - 1];
 			colors[i] = colors[i - 1];
 		}
+		
 		pointsY1[0] = point1.y;
 		pointsX1[0] = point1.x;
 		pointsX2[0] = point2.x;
 		pointsY2[0] = point2.y;
-		colors[0] = changeColor();
-		
+		colors[0] = color1.changeColor();
 		
 		line.forEach(function(item, i) {
 			item.x1.baseVal.value = pointsX1[i];
@@ -170,7 +191,5 @@ let geometry = {
 }
 
 geometry.init();
-
-
 
 setInterval(geometry.run, 50);
