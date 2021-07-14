@@ -138,7 +138,7 @@ let geometry = {
 		point1.y = 0;
 		point1.directX = 'right';
 		point1.directY = 'down';
-		point1.speedX = 4;
+		point1.speedX = 6;
 		point1.speedY = 3;
 		
 		point2.x = 0;
